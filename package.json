@@ -10,8 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "flatiron": "^0.4.3",
+    "node-slimerjs": "^1.0.1",
     "phantom": "^2.0.4",
-    "phantomjs": "^2.1.1",
+    "phantomjs": "^2.1.3",
+    "slimerjs": "^0.9.6",
     "union": "^0.4.4"
   }
 }
