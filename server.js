@@ -40,7 +40,7 @@ app.router.get('/crawl', function () {
     });
 });
 
-app.start(8000, function () {
-    console.log(' > http server started on port 8000');
-    console.log(' > visit: http://localhost:8000/ ');
+var port = 8000
+app.start(port, function () {
+    logger.info('Server started on port ' + port);
 });
