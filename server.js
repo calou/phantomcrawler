@@ -1,5 +1,6 @@
 var phantom = require('phantom'),
-    flatiron = require('flatiron');
+    flatiron = require('flatiron'),
+    logger = require('./log');
 
 var app = module.exports = flatiron.app;
 var phantomJsOptions = ['--ignore-ssl-errors=yes'];
@@ -18,18 +19,19 @@ app.router.get('/crawl', function () {
     phantom.create(phantomJsOptions).then(function (ph) {
         ph.createPage().then(function (page) {
             if(user_agent) {
-                console.log("Setting user agent for '"+url+"' to : '" + user_agent + "'");
+                logger.info("Setting user agent for '"+url+"' to : '" + user_agent + "'");
                 page.settings.userAgent = user_agent;
             }
             page.open(url).then(function (status) {
                 if(status == "success") {
-                    console.log("Page fetched: " + url);
+                    logger.info("Page fetched: " + url);
                     page.property('content').then(function (content) {
                         res.end(content);
                     });
                 } else {
+                    logger.info("Can not fetch page '" + url +"' : " +status);
                     res.statusCode = 404;
-                    res.end(status);
+                    res.end("");
                 }
                 page.close();
                 ph.exit();

@@ -12,6 +12,7 @@
     "flatiron": "^0.4.3",
     "phantom": "^2.0.4",
     "phantomjs": "^2.1.3",
-    "union": "^0.4.4"
+    "union": "^0.4.4",
+    "winston": "^2.2.0"
   }
 }
