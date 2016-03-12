@@ -2,6 +2,7 @@ var phantom = require('phantom'),
     flatiron = require('flatiron');
 
 var app = module.exports = flatiron.app;
+var phantomJsOptions = ['--ignore-ssl-errors=yes'];
 
 app.use(flatiron.plugins.http, {
     headers: {
@@ -14,19 +15,24 @@ app.router.get('/crawl', function () {
         req = this.req;
     var url = req.query['url'];
     var user_agent = req.query['user_agent'];
-    phantom.create().then(function (ph) {
+    phantom.create(phantomJsOptions).then(function (ph) {
         ph.createPage().then(function (page) {
             if(user_agent) {
                 console.log("Setting user agent for '"+url+"' to : '" + user_agent + "'");
                 page.settings.userAgent = user_agent;
             }
-            page.open(url).then(function () {
-                console.log("Page fetched: " + url);
-                page.property('content').then(function (content) {
-                    res.end(content);
-                    page.close();
-                    ph.exit();
-                });
+            page.open(url).then(function (status) {
+                if(status == "success") {
+                    console.log("Page fetched: " + url);
+                    page.property('content').then(function (content) {
+                        res.end(content);
+                    });
+                } else {
+                    res.statusCode = 404;
+                    res.end(status);
+                }
+                page.close();
+                ph.exit();
             });
         });
     });
